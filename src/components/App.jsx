@@ -1,16 +1,33 @@
+import React, { useEffect } from 'react';
+import { ContactForm } from './ContactForm/ContactForm';
+import { Filter } from './Filter/Filter';
+import { PhoneList } from './PhoneList/PhoneList';
+import { Container } from './ContactForm/StyledContactForm';
+import { useDispatch, useSelector } from 'react-redux';
+import { getContacts } from 'redux/contactsSlice';
+import { fetchContacts } from 'redux/contactsOperation';
+import { Toaster } from 'react-hot-toast';
+
 export const App = () => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
+
+  
   return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101'
-      }}
-    >
-      React homework template
-    </div>
+    <Container>
+      <Toaster />
+      <h1>Phonebook</h1>
+      <ContactForm />
+      {contacts.length !== 0 && (
+        <>
+          <h2>Contacts</h2>
+          <Filter />
+          <PhoneList />
+        </>
+      )}
+    </Container>
   );
 };
